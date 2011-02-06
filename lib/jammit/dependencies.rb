@@ -8,6 +8,7 @@ require 'pathname'
 require 'fileutils'
 
 # Gem Dependencies:
+require 'haml'
 require 'yui/compressor'
 require 'closure-compiler'
 

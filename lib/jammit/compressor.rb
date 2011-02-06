@@ -97,7 +97,7 @@ module Jammit
       paths       = paths.grep(Jammit.template_extension_matcher).sort
       base_path   = find_base_path(paths)
       compiled    = paths.map do |path|
-        contents  = read_binary_file(path)
+        contents  = Haml::Engine.new(read_binary_file(path)).to_html
         contents  = contents.gsub(/\n/, '').gsub("'", '\\\\\'')
         name      = template_name(path, base_path)
         "#{namespace}['#{name}'] = #{Jammit.template_function}('#{contents}');"
