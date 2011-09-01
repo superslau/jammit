@@ -42,19 +42,21 @@ module Jammit
     JST_END         = "})();"
 
     COMPRESSORS = {
-      :yui     => YUI::JavaScriptCompressor,
-      :closure => Closure::Compiler
+      :yui      => YUI::JavaScriptCompressor,
+      :closure  => Jammit.compressors.include?(:closure)  ? Closure::Compiler : nil,
+      :uglifier => Jammit.compressors.include?(:uglifier) ? Jammit::Uglifier  : nil
     }
 
     DEFAULT_OPTIONS = {
-      :yui     => {:munge => true},
-      :closure => {}
+      :yui      => {:munge => true},
+      :closure  => {},
+      :uglifier => {:copyright => false}
     }
 
-    # Creating a compressor initializes the internal YUI Compressor from
-    # the "yui-compressor" gem, or the internal Closure Compiler from the
-    # "closure-compiler" gem.
+    # The css compressor is always the YUI Compressor. JS compression can be
+    # provided with YUI Compressor, Google Closure Compiler or UglifyJS.
     def initialize
+      Jammit.check_java_version
       @css_compressor = YUI::CssCompressor.new(Jammit.css_compressor_options || {})
       flavor          = Jammit.javascript_compressor || Jammit::DEFAULT_COMPRESSOR
       @options        = DEFAULT_OPTIONS[flavor].merge(Jammit.compressor_options || {})
