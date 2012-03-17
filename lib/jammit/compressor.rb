@@ -172,14 +172,14 @@ module Jammit
       end
       [MHTML_START, mhtml, MHTML_END, css].flatten.join('')
     end
-
+    
     # Return a rewritten asset URL for a new stylesheet -- the asset should
     # be tagged for embedding if embeddable, and referenced at the correct level
     # if relative.
     def construct_asset_path(asset_path, css_path, variant)
       public_path = absolute_path(asset_path, css_path)
       return "__EMBED__#{public_path}" if embeddable?(public_path, variant)
-      source = asset_path.absolute? ? asset_path.to_s : relative_path(public_path)
+      source = asset_path.absolute? || ! Jammit.rewrite_relative_paths ? asset_path.to_s : relative_path(public_path)
       rewrite_asset_path(source, public_path)
     end
 
@@ -187,14 +187,14 @@ module Jammit
     # not be relative, given the path of the stylesheet that contains it.
     def absolute_path(asset_pathname, css_pathname)
       (asset_pathname.absolute? ?
-        Pathname.new(File.join(PUBLIC_ROOT, asset_pathname)) :
+        Pathname.new(File.join(Jammit.public_root, asset_pathname)) :
         css_pathname.dirname + asset_pathname).cleanpath
     end
 
     # CSS assets that are referenced by relative paths, and are *not* being
     # embedded, must be rewritten relative to the newly-merged stylesheet path.
     def relative_path(absolute_path)
-      File.join('../', absolute_path.sub(PUBLIC_ROOT, ''))
+      File.join('../', absolute_path.sub(Jammit.public_root, ''))
     end
 
     # Similar to the AssetTagHelper's method of the same name, this will
@@ -246,7 +246,7 @@ module Jammit
 
     # `File.read`, but in "binary" mode.
     def read_binary_file(path)
-      File.open(path, 'rb') {|f| f.read }
+      File.open(path, 'rb:UTF-8') {|f| f.read }
     end
   end
 

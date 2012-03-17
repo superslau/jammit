@@ -93,7 +93,7 @@
     </p>
 
     <p>
-      <b>Current Version:</b> <a href="http://rubygems.org/gems/jammit/">0.6.3</a>
+      <b>Current Version:</b> <a href="http://rubygems.org/gems/jammit/">0.6.5</a>
     </p>
     
     <p>
@@ -234,6 +234,13 @@ stylesheets:
           Defaults to <b>on</b>. When <b>off</b>, JavaScript and CSS packages
           will be left uncompressed (by YUI, Closure, or UglifyJS). Disabling compression is only recommended
           if you're packaging assets in development.
+        </td>
+      </tr>
+      <tr>
+        <td><b>rewrite_relative_paths</b></td>
+        <td><tt>on&nbsp;|&nbsp;off</tt></td>
+        <td class="definition">
+          Defaults to <b>on</b>. When <b>off</b>, relative paths with CSS will be left unchanged.
         </td>
       </tr>
       <tr>
@@ -691,6 +698,12 @@ JST['common/menu']</pre>
     </p>
 
     <h2 id="changes">Change Log</h2>
+    
+    <p>
+      <b class="header">0.6.5</b> &mdash; <small><i>Nov 30, 2011</i></small><br />
+      Added the ability to pass HTML tag options to <tt>include_javascripts</tt>.
+      Fixed a bug that would always cause JS to be recompiled, regardless of mtimes.
+    </p>
     
     <p>
       <b class="header">0.6.3</b> &mdash; <small><i>May 26, 2011</i></small><br />
